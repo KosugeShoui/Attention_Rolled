@@ -9,13 +9,6 @@ Attention Rollout was introduced in paper [Quantifying Attention Flow in Transfo
 For divided space-time attention, each token has `2` dimensions,  let's denote the token as `z(p,t)`, where `p` is spatial dimension and  `t` is the time dimension; 
 
 
-we can calculate the combined space time attention `W` as 
-```python
-W[i,j,p,q] = S[i,j,p]* T[p,j,q]
-```
-
-note that the classification token did not participate in the time attention layer - it was removed from the input before it enter the time attention layer and added back before passing to the space attention layer. This means it only attends to itself during time attention computation, we use an identity matrix to account for this. Since classification did not participate in time attention computation, all the tokens will only be able to attend to classification token from same frame, to address this limitation, in TimeSformer implementation, the `cls_token` output is averaged across all frames at end of each space-time attention block, so that it will be able to carry information from other frames, we also need to average its attention to all input tokens when we compute the combined space time attention
-
 ## Usage
 
 Here is a notebook demostrate how to use attention rollout to visualize space time attention learnt from TimeSformer
